@@ -23,6 +23,11 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Repository\PageRepository'
         );
 
+        $this->app->bind(
+            'App\Repository\FollowerInterface',
+            'App\Repository\FollowerRepository'
+        );
+
     }
 
     /**

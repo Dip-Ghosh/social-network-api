@@ -20,8 +20,11 @@ class PageController extends Controller
         $this->responseResource = $responseResource;
     }
 
-
-
+    /**
+     * @param PageValidationRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     * @param page_name
+     */
     public function createPage(PageValidationRequest $request){
 
         try{

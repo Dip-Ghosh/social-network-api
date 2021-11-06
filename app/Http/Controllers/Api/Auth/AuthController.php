@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginFormValidationRequest;
 use App\Http\Requests\RegisterFormValidationRequest;
 use App\Http\Resources\ApiResponseResource;
-use App\Http\Resources\UserResource;
 use App\Repository\LoginRegistrationInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -38,7 +37,7 @@ class AuthController extends Controller
         try{
 
            $data['user'] = $this->loginRegistration->register($request->only( ['first_name','last_name','email','password']));
-           $data['token'] =$data->createToken('auth_token')->accessToken;
+           $data['token'] =$data['user']->createToken('auth_token')->accessToken;
            return $this->responseResource->ResponseSuccess($data,"User register successfully",Response::HTTP_CREATED);
 
         }catch (\Exception $e){
@@ -59,7 +58,7 @@ class AuthController extends Controller
             return $this->responseResource->ResponseError(null,"Invalid Email or Password",Response::HTTP_UNAUTHORIZED);
         }
         $data['user'] = Auth::user();
-        $data['token'] = Auth::user()->createToken('auth_token')->accessToken;
+        $data['token'] = $data['user']->createToken('auth_token')->accessToken;
         return $this->responseResource->ResponseSuccess($data,"Login successfully",Response::HTTP_OK);
 
     }

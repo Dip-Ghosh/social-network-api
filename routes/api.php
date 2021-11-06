@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\Auth\AuthController;
+use App\Http\Controllers\Api\Follower\FollowerController;
 use App\Http\Controllers\Api\Page\PageController;
 use Illuminate\Support\Facades\Route;
 
@@ -16,6 +17,12 @@ Route::group(['prefix' => 'v1', 'as' => 'v1.'], function () {
 
     //page create route
     Route::post('page/create', [PageController::class, 'createPage'])->middleware('auth:api')->name('pages.create');
+
+    //following route
+    Route::group(['prefix' => 'follow','as'=>'follow.'],function(){
+        Route::post('person', [FollowerController::class, 'followPerson'])->middleware('auth:api')->name('persons');
+        Route::post('page', [FollowerController::class, 'followPage'])->middleware('auth:api')->name('pages');
+    });
 
 
 });
