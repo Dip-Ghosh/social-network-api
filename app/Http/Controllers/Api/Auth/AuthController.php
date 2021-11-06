@@ -5,13 +5,13 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginFormValidationRequest;
 use App\Http\Requests\RegisterFormValidationRequest;
+use App\Http\Resources\ApiResponseResource;
+use App\Http\Resources\UserResource;
 use App\Repository\LoginRegistrationInterface;
-use App\Resource\ApiResponseResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\UnauthorizedException;
-use mysql_xdevapi\Exception;
+
 
 class AuthController extends Controller
 {
@@ -19,10 +19,12 @@ class AuthController extends Controller
     protected $loginRegistration;
     protected $responseResource;
 
+
     public function __construct(LoginRegistrationInterface $loginRegistration,ApiResponseResource $responseResource)
     {
         $this->loginRegistration = $loginRegistration;
         $this->responseResource = $responseResource;
+
     }
 
 
@@ -35,12 +37,11 @@ class AuthController extends Controller
 
         try{
 
-           $data = $this->loginRegistration->register($request->only( ['first_name','last_name','email','password']));
-
-           return $this->responseResource->ResponseSuccess($data,"Registration Complete");
+           $data['user'] = $this->loginRegistration->register($request->only( ['first_name','last_name','email','password']));
+           $data['token'] =$data->createToken('auth_token')->accessToken;
+           return $this->responseResource->ResponseSuccess($data,"User register successfully",Response::HTTP_CREATED);
 
         }catch (\Exception $e){
-
             return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
@@ -58,9 +59,20 @@ class AuthController extends Controller
             return $this->responseResource->ResponseError(null,"Invalid Email or Password",Response::HTTP_UNAUTHORIZED);
         }
         $data['user'] = Auth::user();
-        $data['token'] = Auth::user()->createToken('MyApp')->accessToken;
-        return $this->responseResource->ResponseSuccess($data,"Login successfully");
+        $data['token'] = Auth::user()->createToken('auth_token')->accessToken;
+        return $this->responseResource->ResponseSuccess($data,"Login successfully",Response::HTTP_OK);
 
+    }
+
+
+    public function logout()
+    {
+        try{
+            Auth::user()->token()->revoke();
+            return $this->responseResource->ResponseSuccess(null,"Logout successfully", Response::HTTP_OK);
+        }catch (\Exception $e){
+            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
 

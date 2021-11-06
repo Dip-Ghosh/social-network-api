@@ -18,6 +18,11 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Repository\LoginRegistrationRepository'
         );
 
+        $this->app->bind(
+            'App\Repository\PageInterface',
+            'App\Repository\PageRepository'
+        );
+
     }
 
     /**

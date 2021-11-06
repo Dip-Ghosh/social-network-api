@@ -8,6 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Page extends Model
 {
     use HasFactory;
+    protected $fillable = ['page_name', 'user_id'];
+
     public function posts(){
         return $this->morphMany(Post::class, 'postable');
     }
