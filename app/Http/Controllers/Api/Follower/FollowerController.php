@@ -22,6 +22,11 @@ class FollowerController extends Controller
         $this->followerService = $followerService;
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @param person_id
+     */
     public function followPerson(Request $request)
     {
         try{
@@ -34,6 +39,11 @@ class FollowerController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     * @param page_id
+     */
     public function followPage(Request $request)
     {
         try{

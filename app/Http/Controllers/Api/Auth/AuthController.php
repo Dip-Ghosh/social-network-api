@@ -18,14 +18,12 @@ class AuthController extends Controller
     protected $loginRegistration;
     protected $responseResource;
 
-
     public function __construct(LoginRegistrationInterface $loginRegistration,ApiResponseResource $responseResource)
     {
         $this->loginRegistration = $loginRegistration;
         $this->responseResource = $responseResource;
 
     }
-
 
     /**
      * @param RegisterFormValidationRequest $request
@@ -46,7 +44,6 @@ class AuthController extends Controller
 
     }
 
-
     /**
      * @param LoginFormValidationRequest $request
      * @return \Illuminate\Http\JsonResponse
@@ -63,7 +60,9 @@ class AuthController extends Controller
 
     }
 
-
+    /**
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function logout()
     {
         try{

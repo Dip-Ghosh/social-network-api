@@ -28,6 +28,15 @@ class RepositoryServiceProvider extends ServiceProvider
             'App\Repository\FollowerRepository'
         );
 
+        $this->app->bind(
+            'App\Repository\PostInterface',
+            'App\Repository\PostRepository'
+        );
+        $this->app->bind(
+            'App\Repository\FeedInterface',
+            'App\Repository\FeedRepository'
+        );
+
     }
 
     /**

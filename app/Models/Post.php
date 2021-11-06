@@ -9,8 +9,10 @@ class Post extends Model
 {
     use HasFactory;
 
-    public function postable()
-    {
-        return $this->morphTo();
-    }
+   protected $fillable = [
+       'post_content',
+       'post_publish_type',
+       'publisher_id',
+       'page_id'
+   ];
 }
