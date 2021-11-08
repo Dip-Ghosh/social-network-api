@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
 class FollowerController extends Controller
@@ -31,9 +32,9 @@ class FollowerController extends Controller
         try{
             $routeName = Route::currentRouteName();
             $data = $this->followerService->getFollowerType($request->personId,$routeName);
-            return $this->ResponseSuccess($data,"Logged user is following  Another user successfully", Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Logged user is following  Another user successfully", ResponseAlias::HTTP_CREATED);
         }catch (\Exception $e){
-            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -48,9 +49,9 @@ class FollowerController extends Controller
         try{
             $routeName = Route::currentRouteName();
             $data = $this->followerService->getFollowerType($request->pageId,$routeName);
-            return $this->ResponseSuccess($data,"Logged user is following page successfully", Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Logged user is following page successfully", ResponseAlias::HTTP_CREATED);
         }catch (\Exception $e){
-            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

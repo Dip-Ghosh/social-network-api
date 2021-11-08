@@ -8,6 +8,7 @@ use App\Service\PostPublishService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PostController extends Controller
 {
@@ -28,10 +29,10 @@ class PostController extends Controller
         try{
             $routeName = Route::currentRouteName();
             $data = $this->postPublishService->publishPost($request->all(),$routeName);
-            return $this->responseResource->ResponseSuccess($data,"Post Published By Person successfully",Response::HTTP_OK);
+            return $this->responseResource->ResponseSuccess($data,"Post Published By Person successfully", ResponseAlias::HTTP_OK);
 
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->responseResource->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -46,10 +47,10 @@ class PostController extends Controller
             $routeName = Route::currentRouteName();
             $request['pageId'] =$pageId;
             $data = $this->postPublishService->publishPost($request->all(),$routeName);
-            return $this->ResponseSuccess($data,"Page created successfully",Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Page created successfully", ResponseAlias::HTTP_CREATED);
 
         }catch (\Exception $e){
-            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

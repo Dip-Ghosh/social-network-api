@@ -10,6 +10,7 @@ use Illuminate\Http\Response;
 use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class FeedController extends Controller
 {
@@ -28,7 +29,7 @@ class FeedController extends Controller
     {
         $myCollectionObj = $this->feed->getFeed();
         $data = $this->paginate($myCollectionObj,$request->page_size,$request->page);
-        return $this->ResponseSuccess($data,"List Of Feed",Response::HTTP_OK);
+        return $this->ResponseSuccess($data,"List Of Feed", ResponseAlias::HTTP_OK);
     }
 
     /**

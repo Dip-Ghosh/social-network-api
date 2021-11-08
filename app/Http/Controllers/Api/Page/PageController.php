@@ -8,6 +8,7 @@ use App\Http\Resources\ApiResponseResource;
 use App\Repository\PageInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 class PageController extends Controller
 {
@@ -28,10 +29,10 @@ class PageController extends Controller
 
         try{
             $data = $this->page->savePageInformation($request->all());
-            return $this->ResponseSuccess($data,"Page created successfully",Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Page created successfully", ResponseAlias::HTTP_CREATED);
 
         }catch (\Exception $e){
-            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }

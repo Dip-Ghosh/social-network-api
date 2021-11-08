@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginFormValidationRequest;
 use App\Http\Requests\RegisterFormValidationRequest;
-use App\Http\Resources\ApiResponseResource;
 use App\Repository\LoginRegistrationInterface;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\UnauthorizedException;
+use Symfony\Component\HttpFoundation\Response as ResponseAlias;
 
 
 class AuthController extends Controller
@@ -33,10 +34,10 @@ class AuthController extends Controller
         try{
            $data['user'] = $this->loginRegistration->register($request->only( ['first_name','last_name','email','password']));
            $data['token'] =$data['user']->createToken('auth_token')->accessToken;
-           return $this->ResponseSuccess($data,"User register successfully",Response::HTTP_CREATED);
+           return $this->ResponseSuccess($data,"User register successfully", ResponseAlias::HTTP_CREATED);
 
         }catch (\Exception $e){
-            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -49,11 +50,11 @@ class AuthController extends Controller
     public function login(LoginFormValidationRequest $request)
     {
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return $this->ResponseError(null,"Invalid Email or Password",Response::HTTP_UNAUTHORIZED);
+            return $this->ResponseError(null,"Invalid Email or Password", ResponseAlias::HTTP_UNAUTHORIZED);
         }
         $data['user'] = Auth::user();
         $data['token'] = $data['user']->createToken('auth_token')->accessToken;
-        return $this->ResponseSuccess($data,"Login successfully",Response::HTTP_OK);
+        return $this->ResponseSuccess($data,"Login successfully", ResponseAlias::HTTP_OK);
 
     }
 
@@ -64,9 +65,9 @@ class AuthController extends Controller
     {
         try{
             Auth::user()->token()->revoke();
-            return $this->ResponseSuccess(null,"Logout successfully", Response::HTTP_OK);
+            return $this->ResponseSuccess(null,"Logout successfully", ResponseAlias::HTTP_OK);
         }catch (\Exception $e){
-            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(), ResponseAlias::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

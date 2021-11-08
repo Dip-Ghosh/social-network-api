@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
+use Symfony\Component\HttpFoundation\Response;
 
 class Controller extends BaseController
 {
@@ -33,7 +34,7 @@ class Controller extends BaseController
      * @param int $status_code
      * @return \Illuminate\Http\JsonResponse
      */
-    public  function ResponseError($errors, $message = 'Data is invalid', $status_code = JsonResponse::HTTP_BAD_REQUEST)
+    public  function ResponseError($errors, $message = 'Data is invalid', $status_code = Response::HTTP_BAD_REQUEST)
     {
         return response()->json([
             'status' => false,
