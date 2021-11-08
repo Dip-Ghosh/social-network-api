@@ -18,11 +18,9 @@ class AuthController extends Controller
     protected $loginRegistration;
     protected $responseResource;
 
-    public function __construct(LoginRegistrationInterface $loginRegistration,ApiResponseResource $responseResource)
+    public function __construct(LoginRegistrationInterface $loginRegistration)
     {
         $this->loginRegistration = $loginRegistration;
-        $this->responseResource = $responseResource;
-
     }
 
     /**
@@ -33,13 +31,12 @@ class AuthController extends Controller
     public function register( RegisterFormValidationRequest $request){
 
         try{
-
            $data['user'] = $this->loginRegistration->register($request->only( ['first_name','last_name','email','password']));
            $data['token'] =$data['user']->createToken('auth_token')->accessToken;
-           return $this->responseResource->ResponseSuccess($data,"User register successfully",Response::HTTP_CREATED);
+           return $this->ResponseSuccess($data,"User register successfully",Response::HTTP_CREATED);
 
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -52,11 +49,11 @@ class AuthController extends Controller
     public function login(LoginFormValidationRequest $request)
     {
         if (!Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            return $this->responseResource->ResponseError(null,"Invalid Email or Password",Response::HTTP_UNAUTHORIZED);
+            return $this->ResponseError(null,"Invalid Email or Password",Response::HTTP_UNAUTHORIZED);
         }
         $data['user'] = Auth::user();
         $data['token'] = $data['user']->createToken('auth_token')->accessToken;
-        return $this->responseResource->ResponseSuccess($data,"Login successfully",Response::HTTP_OK);
+        return $this->ResponseSuccess($data,"Login successfully",Response::HTTP_OK);
 
     }
 
@@ -67,9 +64,9 @@ class AuthController extends Controller
     {
         try{
             Auth::user()->token()->revoke();
-            return $this->responseResource->ResponseSuccess(null,"Logout successfully", Response::HTTP_OK);
+            return $this->ResponseSuccess(null,"Logout successfully", Response::HTTP_OK);
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

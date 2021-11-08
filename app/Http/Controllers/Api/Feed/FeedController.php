@@ -14,23 +14,32 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class FeedController extends Controller
 {
     private $feed;
-    private $responseResource;
-    public function __construct(FeedInterface $feed,ApiResponseResource $responseResource)
+
+    public function __construct(FeedInterface $feed)
     {
         $this->feed = $feed;
-        $this->responseResource = $responseResource;
     }
 
-
-    public function index(Request $request){
-
+    /**
+     * @param Request $request
+     * @return mixed
+     */
+    public function index(Request $request)
+    {
         $myCollectionObj = $this->feed->getFeed();
         $data = $this->paginate($myCollectionObj,$request->page_size,$request->page);
-        return $this->responseResource->ResponseSuccess($data,"List Of Feed",Response::HTTP_OK);
-
+        return $this->ResponseSuccess($data,"List Of Feed",Response::HTTP_OK);
     }
-    public function paginate($items,$perPage = 5, $page = null,$options = []){
 
+    /**
+     * @param $items
+     * @param int $perPage
+     * @param null $page
+     * @param array $options
+     * @return LengthAwarePaginator
+     */
+    private function paginate($items,$perPage = 5, $page = null,$options = [])
+    {
         $page = $page ?: (Paginator::resolveCurrentPage() ?: 1);
         $items = $items instanceof Collection ? $items : Collection::make($items);
         return new LengthAwarePaginator($items->forPage($page, $perPage), $items->count(), $perPage, $page, $options);

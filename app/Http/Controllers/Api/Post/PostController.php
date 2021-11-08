@@ -13,15 +13,16 @@ class PostController extends Controller
 {
 
     private $postPublishService;
-    private $responseResource;
 
-    public function __construct( PostPublishService $postPublishService,ApiResponseResource $responseResource )
+    public function __construct( PostPublishService $postPublishService)
     {
         $this->postPublishService = $postPublishService;
-        $this->responseResource   = $responseResource;
     }
 
-
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function postPublishedByPerson(Request $request)
     {
         try{
@@ -34,17 +35,21 @@ class PostController extends Controller
         }
     }
 
-
+    /**
+     * @param Request $request
+     * @param $pageId
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function postPublishedByPersonFromPage(Request $request,$pageId)
     {
         try{
             $routeName = Route::currentRouteName();
             $request['pageId'] =$pageId;
             $data = $this->postPublishService->publishPost($request->all(),$routeName);
-            return $this->responseResource->ResponseSuccess($data,"Page created successfully",Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Page created successfully",Response::HTTP_CREATED);
 
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -11,13 +11,12 @@ use Illuminate\Http\Response;
 
 class PageController extends Controller
 {
-    protected $page;
-    protected $responseResource;
+    private $page;
 
-    public function __construct(PageInterface $page,ApiResponseResource $responseResource)
+
+    public function __construct(PageInterface $page)
     {
         $this->page = $page;
-        $this->responseResource = $responseResource;
     }
 
     /**
@@ -29,10 +28,10 @@ class PageController extends Controller
 
         try{
             $data = $this->page->savePageInformation($request->all());
-            return $this->responseResource->ResponseSuccess($data,"Page created successfully",Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Page created successfully",Response::HTTP_CREATED);
 
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }

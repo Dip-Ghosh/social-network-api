@@ -13,12 +13,11 @@ use Illuminate\Support\Facades\Route;
 
 class FollowerController extends Controller
 {
-    protected $responseResource;
-    protected $followerService;
 
-    public function __construct(ApiResponseResource $responseResource,FollowerService $followerService)
+    private $followerService;
+
+    public function __construct(FollowerService $followerService)
     {
-        $this->responseResource = $responseResource;
         $this->followerService = $followerService;
     }
 
@@ -32,9 +31,9 @@ class FollowerController extends Controller
         try{
             $routeName = Route::currentRouteName();
             $data = $this->followerService->getFollowerType($request->personId,$routeName);
-            return $this->responseResource->ResponseSuccess($data,"Logged user is following  Another user successfully", Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Logged user is following  Another user successfully", Response::HTTP_CREATED);
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -49,9 +48,9 @@ class FollowerController extends Controller
         try{
             $routeName = Route::currentRouteName();
             $data = $this->followerService->getFollowerType($request->pageId,$routeName);
-            return $this->responseResource->ResponseSuccess($data,"Logged user is following page successfully", Response::HTTP_CREATED);
+            return $this->ResponseSuccess($data,"Logged user is following page successfully", Response::HTTP_CREATED);
         }catch (\Exception $e){
-            return $this->responseResource->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->ResponseError(null,$e->getMessage(),Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
